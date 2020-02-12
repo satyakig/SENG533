@@ -3,8 +3,16 @@ steps:
   - name: "gcr.io/cloud-builders/npm"
     args: ["ci"]
     dir: "nodejs"
+  # Test
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'lint']
+    dir: "nodejs"
+  # Build
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    dir: "nodejs"
   # Deploy
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
-    dir: "nodejs"
-timeout: "600s"
+    dir: "nodejs/build"
+timeout: "900s"

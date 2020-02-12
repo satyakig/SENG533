@@ -26,6 +26,7 @@
 *.DS_Store
 *.env*
 *.vscode
+*.eslintcache
 
 # logs
 *.log*
