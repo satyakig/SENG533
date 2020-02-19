@@ -1,4 +1,4 @@
-package com.example.SENG3.Java.Server;
+package seng533.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

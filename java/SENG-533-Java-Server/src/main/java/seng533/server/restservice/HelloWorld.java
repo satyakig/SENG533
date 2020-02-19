@@ -1,4 +1,4 @@
-package com.example.SENG3.Java.Server.restservice;
+package seng533.server.restservice;
 
 public class HelloWorld {
 
