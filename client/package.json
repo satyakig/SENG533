@@ -1,0 +1,19 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "12.x.x",
+    "npm": "6.x.x"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "minimist": "^1.2.0"
+  },
+  "scripts": {
+    "start": "node --experimental-modules index.js",
+    "testArgs": "node --experimental-modules index.js --SERVER java --DB sql --SIZE 1KB --FREQ 5 --NUM_USERS 1 --SCENARIO default"
+  }
+}
