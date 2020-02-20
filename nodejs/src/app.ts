@@ -3,6 +3,10 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import asyncHandler from 'express-async-handler';
+import { initializeApp } from './Firebase';
+import { noSqlRoute } from './nosql';
+
+initializeApp();
 
 const app = express();
 
@@ -14,9 +18,11 @@ app.use(morgan('short'));
 app.use(
   '/',
   asyncHandler(async (req, res, next) => {
-    res.send('Hello World');
+    next();
   }),
 );
+
+app.use('/nosql', noSqlRoute);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
