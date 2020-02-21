@@ -48,7 +48,10 @@ router.post(
       timeDelete: deleteEnd - deleteStart,
     };
 
-    await db.collection('log').add(log);
+    await db
+      .collection('log')
+      .doc(id)
+      .add(log);
 
     const endTime = nanoTime();
     return res.send({
