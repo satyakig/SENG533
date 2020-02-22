@@ -1,5 +1,5 @@
-export function nanoTime() {
-  const hrTime = process.hrtime();
+import moment from 'moment';
 
-  return hrTime[0] * 1e9 + hrTime[1];
+export function getCurrentMillis() {
+  return moment().valueOf();
 }

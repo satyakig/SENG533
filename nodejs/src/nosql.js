@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import sizeof from 'object-sizeof';
 import { Router } from 'express';
-import { nanoTime } from './helpers';
+import { getCurrentMillis } from './helpers';
 import { getDb } from './Firebase';
 
 const router = Router();
@@ -9,7 +9,7 @@ const router = Router();
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    const startTime = nanoTime();
+    const startTime = getCurrentMillis();
 
     const db = getDb();
     const body = req.body;
@@ -18,29 +18,29 @@ router.post(
     const requestSize = body.requestSize;
     const data = body.data;
 
-    const writeStart = nanoTime();
+    const writeStart = getCurrentMillis();
     const doc = await db.collection('data').add({ data });
-    const writeEnd = nanoTime();
+    const writeEnd = getCurrentMillis();
 
-    const readStart = nanoTime();
+    const readStart = getCurrentMillis();
     const docRead = await db
       .collection('data')
       .doc(doc.id)
       .get();
     docRead.data();
-    const readEnd = nanoTime();
+    const readEnd = getCurrentMillis();
 
-    const deleteStart = nanoTime();
+    const deleteStart = getCurrentMillis();
     await db
       .collection('data')
       .doc(doc.id)
       .delete();
-    const deleteEnd = nanoTime();
+    const deleteEnd = getCurrentMillis();
 
     const log = {
       id,
       frequency,
-      timestamp: Date.now(),
+      timestamp: getCurrentMillis(),
       serverType: 'nodejs',
       databaseType: 'nosql',
       requestSize,
@@ -54,7 +54,7 @@ router.post(
       .doc(id)
       .set(log);
 
-    const endTime = nanoTime();
+    const endTime = getCurrentMillis();
     return res.send({
       id,
       totalTime: endTime - startTime,
