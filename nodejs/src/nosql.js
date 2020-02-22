@@ -49,7 +49,7 @@ router.post(
     };
 
     await db
-      .collection('log')
+      .collection('logs')
       .doc(id)
       .add(log);
 
