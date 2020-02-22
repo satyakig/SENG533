@@ -15,6 +15,7 @@ router.post(
     const body = req.body;
     const id = body.id;
     const frequency = body.frequency;
+    const requestSize = body.requestSize;
     const data = body.data;
 
     const writeStart = nanoTime();
@@ -42,7 +43,7 @@ router.post(
       timestamp: Date.now(),
       serverType: 'nodejs',
       databaseType: 'nosql',
-      requestSize: sizeof(data),
+      requestSize,
       timeWrite: writeEnd - writeStart,
       timeRead: readEnd - readStart,
       timeDelete: deleteEnd - deleteStart,
@@ -51,7 +52,7 @@ router.post(
     await db
       .collection('logs')
       .doc(id)
-      .add(log);
+      .set(log);
 
     const endTime = nanoTime();
     return res.send({
