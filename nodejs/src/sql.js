@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
 import { getCurrentMillis } from './helpers';
-import { getDb } from './GCloud';
+import { getConnection, getDb } from './GCloud';
 
 const router = Router();
 
@@ -10,6 +10,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const startTime = getCurrentMillis();
 
+    const connection = getConnection();
     const db = getDb();
     const body = req.body;
     const id = body.id;
@@ -18,22 +19,18 @@ router.post(
     const data = body.data;
 
     const writeStart = getCurrentMillis();
-    const doc = await db.collection('data').add({ data });
+    await connection.query(`INSERT INTO data_table (id, data) VALUES(?, ?)`, [
+      id,
+      JSON.stringify(data),
+    ]);
     const writeEnd = getCurrentMillis();
 
     const readStart = getCurrentMillis();
-    const docRead = await db
-      .collection('data')
-      .doc(doc.id)
-      .get();
-    docRead.data();
+    const doc = await connection.query(`SELECT * FROM data_table WHERE id = '${id}'`);
     const readEnd = getCurrentMillis();
 
     const deleteStart = getCurrentMillis();
-    await db
-      .collection('data')
-      .doc(doc.id)
-      .delete();
+    await connection.query(`DELETE FROM data_table WHERE id = '${id}'`);
     const deleteEnd = getCurrentMillis();
 
     const log = {
@@ -61,4 +58,4 @@ router.post(
   }),
 );
 
-export const noSqlRoute = router;
+export const sqlRoute = router;

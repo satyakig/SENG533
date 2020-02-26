@@ -1,9 +1,11 @@
 import admin from 'firebase-admin';
+import mysql from 'promise-mysql';
 
 let firebase;
+let connection;
 
-export function initializeApp() {
-  firebase = admin.initializeApp({
+export async function initializeFirebase() {
+  firebase = await admin.initializeApp({
     credential: admin.credential.cert({
       type: 'service_account',
       project_id: 'smiling-audio-268001',
@@ -25,6 +27,15 @@ export function getDb() {
   return firebase.firestore();
 }
 
-export function getAuth() {
-  return firebase.auth();
+export async function initializeMySql() {
+  connection = await mysql.createConnection({
+    host: '35.225.211.77',
+    user: 'root',
+    password: 'seng533',
+    database: 'data',
+  });
+}
+
+export function getConnection() {
+  return connection;
 }
