@@ -32,3 +32,6 @@ build/
 
 ### firebase credentials ###
 firestore-cred.json
+
+### sql credentials ###
+sqlConfig.properties
