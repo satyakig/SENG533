@@ -1,6 +1,9 @@
 /* 
-    A list of dictionaries defining the expected arguments for the performance client. 
+    A list of dictionaries defining the expected arguments and constants for the performance client. 
 */
+
+// Length of the Test
+export const TEST_PERIOD = 1000 * 120; // Two Minutes
 
 // Server Type
 export const SERVER = {
@@ -53,5 +56,9 @@ export const NUM_USERS = {
 
 // Which use-case to run
 export const SCENARIO = {
-    DEFAULT: 'default'
+    DEFAULT: 'default',
+    GET: 'get',
+    PUT: 'put',
+    POST: 'post',
+    DELETE: 'delete'
 }
