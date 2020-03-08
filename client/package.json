@@ -1,0 +1,23 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "12.x.x",
+    "npm": "6.x.x"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "dummy-json": "^2.0.0",
+    "firebase-admin": "^8.9.2",
+    "minimist": "^1.2.0",
+    "shortid": "^2.2.15"
+  },
+  "scripts": {
+    "start": "node --experimental-modules index.js",
+    "testArgs": "node --experimental-modules index.js --server java --db sql --size 1 --freq 5 --num_users 1 --scenario default"
+  }
+}
