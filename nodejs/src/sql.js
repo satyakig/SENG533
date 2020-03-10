@@ -19,10 +19,7 @@ router.post(
     const data = body.data;
 
     const writeStart = getCurrentMillis();
-    await connection.query(`INSERT INTO data_table (id, data) VALUES(?, ?)`, [
-      id,
-      JSON.stringify(data),
-    ]);
+    await connection.query(`INSERT INTO data_table (id, data) VALUES(?, ?)`, [id, data]);
     const writeEnd = getCurrentMillis();
 
     const readStart = getCurrentMillis();
