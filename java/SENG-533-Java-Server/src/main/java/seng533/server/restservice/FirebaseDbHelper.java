@@ -10,22 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FirebaseDbHelper {
-    private static FirebaseDbHelper dbHelper = null;
-    private Firestore db = null;
-
-    // Constructor
-    private FirebaseDbHelper() {
-        db = createNewInstance();
-    }
-
-    public static Firestore getDbInstance() {
-        if (dbHelper == null) {
-            dbHelper = new FirebaseDbHelper();
-        }
-        return dbHelper.db;
-    }
-
-    private static Firestore createNewInstance() {
+    static
+    {
         try {
             InputStream serviceAccount = FirebaseDbHelper.class.getResourceAsStream("/firestore-cred.json");
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -33,11 +19,11 @@ public class FirebaseDbHelper {
                     .setCredentials(credentials)
                     .build();
             FirebaseApp.initializeApp(options);
-
-            return FirestoreClient.getFirestore();
         } catch (IOException e) {
             System.out.println(e);
-            return null;
         }
+    }
+    public static Firestore getDbInstance(){
+        return FirestoreClient.getFirestore();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -19,6 +20,9 @@ public class SqlRequestController {
     public ResponseEntity<Map<String, Object>> sql(@RequestBody Map<String, Object> request) {
         // boolean to keep track of query errors
         boolean queryError = false;
+        String writeError = "";
+        String readError = "";
+        String deleteError = "";
 
         // parsing the request body
         final String id = (String) request.get("id");
@@ -49,7 +53,9 @@ public class SqlRequestController {
                 writeStatement.execute();
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             queryError = true;
+            writeError = e.toString();
         } finally {
             try {
                 if(writeStatement != null) {
@@ -78,7 +84,9 @@ public class SqlRequestController {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             queryError = true;
+            readError = e.toString();
         } finally {
             try {
                 if(readStatement != null) {
@@ -106,7 +114,9 @@ public class SqlRequestController {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             queryError = true;
+            deleteError = e.toString();
         } finally {
             try {
                 if(deleteStatement != null) {
@@ -118,10 +128,20 @@ public class SqlRequestController {
         }
         final long deleteEndTime = System.currentTimeMillis();
 
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Sending an error response in case there was a error regarding any queries
         if(queryError){
             final Map<String, Object> queryErrorRes = new HashMap<>();
             queryErrorRes.put("message", "One or more (write, read, or delete) of the sql queries failed.");
+            queryErrorRes.put("write error", writeError);
+            queryErrorRes.put("read error", readError);
+            queryErrorRes.put("delete error", deleteError);
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(queryErrorRes);
         }
 
@@ -142,13 +162,13 @@ public class SqlRequestController {
             Firestore db = FirebaseDbHelper.getDbInstance();
             if(db == null){
                 final Map<String, Object> connectionErrorRes = new HashMap<>();
-                connectionErrorRes.put("message", "Cannot establish connection to database.");
+                connectionErrorRes.put("message", "Cannot establish connection to database for writing logs.");
                 return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(connectionErrorRes);
             }
             db.collection("logs").document(id).set(log).get();
         } catch (InterruptedException | ExecutionException e) {
             final Map<String, Object> logErrorRes = new HashMap<>();
-            logErrorRes.put("message", "Writing to log failed.");
+            logErrorRes.put("message", "Writing to log database failed.");
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(logErrorRes);
         }
 
