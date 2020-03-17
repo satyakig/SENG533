@@ -140,6 +140,11 @@ public class SqlRequestController {
         // Writing log to the database
         try {
             Firestore db = FirebaseDbHelper.getDbInstance();
+            if(db == null){
+                final Map<String, Object> connectionErrorRes = new HashMap<>();
+                connectionErrorRes.put("message", "Cannot establish connection to database.");
+                return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(connectionErrorRes);
+            }
             db.collection("logs").document(id).set(log).get();
         } catch (InterruptedException | ExecutionException e) {
             final Map<String, Object> logErrorRes = new HashMap<>();

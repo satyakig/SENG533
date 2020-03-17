@@ -10,24 +10,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FirebaseDbHelper {
+    private static FirebaseDbHelper dbHelper = null;
     private Firestore db = null;
-
-    private static FirebaseDbHelper dbHelper;
 
     // Constructor
     private FirebaseDbHelper() {
-        this.db = createNewInstance();
-    }
-
-    // Initializes this singleton - called from main
-    public static void initializeDb(){
-        dbHelper = new FirebaseDbHelper();
+        db = createNewInstance();
     }
 
     public static Firestore getDbInstance() {
-        // If connection wasn't made for some reason, try again
-        if (dbHelper.db == null) {
-            dbHelper.db = createNewInstance();
+        if (dbHelper == null) {
+            dbHelper = new FirebaseDbHelper();
         }
         return dbHelper.db;
     }

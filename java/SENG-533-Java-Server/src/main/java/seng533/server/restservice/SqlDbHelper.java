@@ -8,24 +8,18 @@ import java.util.Properties;
 
 
 public class SqlDbHelper {
-    private Connection connection = null;
-
     private static SqlDbHelper sqlDbHelper;
+    private Connection connection = null;
 
     // Constructor
     private SqlDbHelper() {
-        this.connection = createNewInstance();
-    }
-
-    // Initializes this singleton - called from main
-    public static void initializeDb(){
-        sqlDbHelper = new SqlDbHelper();
+        connection = createNewInstance();
     }
 
     public static Connection getDbConnection() {
         // If connection wasn't made for some reason, try again
-        if (sqlDbHelper.connection == null) {
-            sqlDbHelper.connection = createNewInstance();
+        if (sqlDbHelper == null) {
+            sqlDbHelper = new SqlDbHelper();
         }
         return sqlDbHelper.connection;
     }
