@@ -35,7 +35,7 @@ router.post(
       frequency,
       timestamp: getCurrentMillis(),
       serverType: 'nodejs',
-      databaseType: 'nosql',
+      databaseType: 'sql',
       requestSize,
       timeWrite: writeEnd - writeStart,
       timeRead: readEnd - readStart,
