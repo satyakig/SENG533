@@ -18,4 +18,5 @@ public class SqlDbHelper {
         }
         return null;
     }
+    public static void initialize(){ System.out.println("Initialized SQL DB Helper."); }
 }

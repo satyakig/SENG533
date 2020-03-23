@@ -26,4 +26,5 @@ public class FirebaseDbHelper {
     public static Firestore getDbInstance(){
         return FirestoreClient.getFirestore();
     }
+    public static void initialize(){ System.out.println("Initialized NoSQL DB Helper."); }
 }
