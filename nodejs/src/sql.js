@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
-import { getCurrentMillis } from './helpers';
+import { getCurrentMillis, getStats } from './helpers';
 import { getConnection, getDb } from './GCloud';
 
 const router = Router();
@@ -30,6 +30,7 @@ router.post(
     await connection.query(`DELETE FROM data_table WHERE id = '${id}'`);
     const deleteEnd = getCurrentMillis();
 
+    const stats = await getStats();
     const log = {
       id,
       frequency,
@@ -40,6 +41,7 @@ router.post(
       timeWrite: writeEnd - writeStart,
       timeRead: readEnd - readStart,
       timeDelete: deleteEnd - deleteStart,
+      ...stats,
     };
 
     await db

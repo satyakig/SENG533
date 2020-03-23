@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { initializeFirebase, initializeMySql } from './GCloud';
 import { noSqlRoute } from './nosql';
 import { sqlRoute } from './sql';
+import { getStats } from './helpers';
 
 initializeFirebase();
 initializeMySql();
