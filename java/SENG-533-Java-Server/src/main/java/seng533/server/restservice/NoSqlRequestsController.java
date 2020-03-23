@@ -2,10 +2,13 @@ package seng533.server.restservice;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.sun.management.OperatingSystemMXBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -17,6 +20,8 @@ public class NoSqlRequestsController {
 
     @PostMapping("/nosql")
     public ResponseEntity<Map<String, Object>> nosql(@RequestBody Map<String, Object> request) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+
         // boolean to keep track of query errors
         boolean queryError = false;
         String writeError = "";
@@ -101,6 +106,9 @@ public class NoSqlRequestsController {
         log.put("timeWrite", writeEndTime - writeStartTime);
         log.put("timeRead", readEndTime - readStartTime);
         log.put("timeDelete", deleteEndTime - deleteStartTime);
+        log.put("cpuUsage", osBean.getSystemCpuLoad());
+        log.put("freeMem", osBean.getFreePhysicalMemorySize());
+        log.put("totalMem", osBean.getTotalPhysicalMemorySize());
 
         // Writing log to the database
         try {
