@@ -20,6 +20,6 @@
   "scripts": {
     "start": "node --experimental-modules index.js --max-old-space-size=8192",
     "testArgs": "node --experimental-modules --max-old-space-size=8192 index.js --server java --db sql --size 1 --freq 5 --instance tiny --scenario default",
-    "js-script": "node --experimental-modules js-script.js"
+    "js-script": "node --experimental-modules scripts/js-script.js"
   }
 }

@@ -1,4 +1,4 @@
-const shelljs = require("shelljs");
+import shelljs from "shelljs";
 
 const instances = {
   B1: "TINY",
