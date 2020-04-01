@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
-import { getCurrentMillis } from './helpers';
+import { getCurrentMillis, getStats } from './helpers';
 import { getConnection, getDb } from './GCloud';
 
 const router = Router();
@@ -19,10 +19,7 @@ router.post(
     const data = body.data;
 
     const writeStart = getCurrentMillis();
-    await connection.query(`INSERT INTO data_table (id, data) VALUES(?, ?)`, [
-      id,
-      JSON.stringify(data),
-    ]);
+    await connection.query(`INSERT INTO data_table (id, data) VALUES(?, ?)`, [id, data]);
     const writeEnd = getCurrentMillis();
 
     const readStart = getCurrentMillis();
@@ -33,16 +30,18 @@ router.post(
     await connection.query(`DELETE FROM data_table WHERE id = '${id}'`);
     const deleteEnd = getCurrentMillis();
 
+    const stats = await getStats();
     const log = {
       id,
       frequency,
       timestamp: getCurrentMillis(),
       serverType: 'nodejs',
-      databaseType: 'nosql',
+      databaseType: 'sql',
       requestSize,
       timeWrite: writeEnd - writeStart,
       timeRead: readEnd - readStart,
       timeDelete: deleteEnd - deleteStart,
+      ...stats,
     };
 
     await db

@@ -35,3 +35,4 @@ firestore-cred.json
 
 ### sql credentials ###
 sqlConfig.properties
+hikari.properties

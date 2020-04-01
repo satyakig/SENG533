@@ -2,10 +2,13 @@ package seng533.server.restservice;
 
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.sun.management.OperatingSystemMXBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -17,8 +20,13 @@ public class NoSqlRequestsController {
 
     @PostMapping("/nosql")
     public ResponseEntity<Map<String, Object>> nosql(@RequestBody Map<String, Object> request) {
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+
         // boolean to keep track of query errors
         boolean queryError = false;
+        String writeError = "";
+        String readError = "";
+        String deleteError = "";
 
         // parsing the request body
         final String id = (String) request.get("id");
@@ -47,6 +55,7 @@ public class NoSqlRequestsController {
         } catch (Exception e) {
             e.printStackTrace();
             queryError = true;
+            writeError = e.toString();
         }
         final long writeEndTime = System.currentTimeMillis();
 
@@ -56,7 +65,9 @@ public class NoSqlRequestsController {
             try {
                 db.collection("data").document(addedDocRef.getId()).get().get();
             } catch (Exception e) {
+                e.printStackTrace();
                 queryError = true;
+                readError = e.toString();
             }
         }
         final long readEndTime = System.currentTimeMillis();
@@ -67,7 +78,9 @@ public class NoSqlRequestsController {
             try {
                 db.collection("data").document(addedDocRef.getId()).delete().get();
             } catch (Exception e) {
+                e.printStackTrace();
                 queryError = true;
+                deleteError = e.toString();
             }
         }
         final long deleteEndTime = System.currentTimeMillis();
@@ -76,6 +89,9 @@ public class NoSqlRequestsController {
         if(queryError){
             final Map<String, Object> queryErrorRes = new HashMap<>();
             queryErrorRes.put("message", "One or more (write, read, or delete) of the sql queries failed.");
+            queryErrorRes.put("write error", writeError);
+            queryErrorRes.put("read error", readError);
+            queryErrorRes.put("delete error", deleteError);
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(queryErrorRes);
         }
 
@@ -90,6 +106,9 @@ public class NoSqlRequestsController {
         log.put("timeWrite", writeEndTime - writeStartTime);
         log.put("timeRead", readEndTime - readStartTime);
         log.put("timeDelete", deleteEndTime - deleteStartTime);
+        log.put("cpuUsage", osBean.getSystemCpuLoad());
+        log.put("freeMem", osBean.getFreePhysicalMemorySize());
+        log.put("totalMem", osBean.getTotalPhysicalMemorySize());
 
         // Writing log to the database
         try {
