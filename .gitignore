@@ -91,3 +91,4 @@ yarn-error.log*
 *.iws
 
 **/.ipynb_checkpoints/**
+**/results/*
