@@ -1,0 +1,16 @@
+{
+    "settings": {
+        "timestamp": "2020-04-01T00:28:38.229Z",
+        "server": "java",
+        "db": "sql",
+        "size": 1,
+        "freq": 1,
+        "scenario": "default",
+        "instanceType": "b1"
+    },
+    "summary": {
+        "totalFailed": 0,
+        "totalSuccess": 119,
+        "testLength": "120 seconds"
+    }
+}

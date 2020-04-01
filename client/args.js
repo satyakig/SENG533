@@ -5,6 +5,20 @@
 // Length of the Test
 export const TEST_PERIOD = 1000 * 120; // Two Minutes
 
+// How many consecutive errors before preemtively stopping test
+export const TOO_MANY_ERRORS = 10;
+
+// How often to check error count
+export const CHECK_PERIOD = 1000 * 2;
+
+// Which GCP server instance size to use
+export const INSTANCE = {
+    TINY: 'b1',
+    SMALL: 'b2',
+    MEDIUM: 'b4',
+    LARGE: 'b8'
+}
+
 // Server Type
 export const SERVER = {
     JAVA: 'java',
@@ -31,19 +45,10 @@ export const SIZE = {
 
 // Requests per second
 export const FREQ = {
-    '5': 5,
-    '10': 10,
-    '15': 15,
-    '20': 20,
-    '40': 40,
-    '50': 50,
-    '60': 60,
-    '70': 70
-}
-
-// Number of Users
-export const NUM_USERS = {
     '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
     '5': 5,
     '10': 10,
     '15': 15,
