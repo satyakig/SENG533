@@ -1,21 +1,25 @@
 import { getHttp } from '../helpers.js';
-import { javaURL, nodeURL } from '../config.js';
+import { javaURL, nodeURL, prefixURL } from '../config.js';
 
 const http = getHttp();
 
 export const routes = {
     get: function get() { console.log('GET') },
     put: function put() { console.log('PUT') },
-    post: async function post(url, body, results) {
+    post: async function post(url, body, results, instance, updateErrors) {
         try {
-            const response = await http.post(url, body);
+            const response = await http.post(prefixURL + instance + url, body);
+
             results.push({
                 id: response.data.id,
                 totalTime: response.data.totalTime,
-                clientTotalTime: response.headers['request-duration']
+                clientTotalTime: response.headers['request-duration'],
+                instanceType: instance
             });
+
+            updateErrors(false);
         } catch (error) {
-            console.log(error);
+            updateErrors(true);
         }
     },
     del: function del() { console.log('DELETE') },

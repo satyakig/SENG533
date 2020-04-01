@@ -9,9 +9,9 @@ export function generateId() {
 }
 
 // Save a json object to a file with a unique id
-export function writeToFile(data) {
+export function writeToFile(title, data) {
   try {
-    fs.writeFileSync('./test-' + generateId() + '.json', JSON.stringify(data));
+    fs.writeFileSync('./results/' + title + '-' + generateId() + '.json', JSON.stringify(data));
   } catch (error) {
     console.error(error)
   }
