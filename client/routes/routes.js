@@ -6,7 +6,7 @@ const http = getHttp();
 export const routes = {
     get: function get() { console.log('GET') },
     put: function put() { console.log('PUT') },
-    post: async function post(url, body, results, instance, updateErrors) {
+    post: async function post(url, body, results, instance, updateErrors, errorResponse) {
         try {
             const response = await http.post(prefixURL + instance + url, body);
 
@@ -19,6 +19,7 @@ export const routes = {
 
             updateErrors(false);
         } catch (error) {
+            results.push(errorResponse);
             updateErrors(true);
         }
     },

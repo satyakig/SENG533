@@ -76,7 +76,7 @@ import {
         }
     }
 
-    console.log('Sending warmup message to server.\n');
+    console.log('\nSending a warmup message to wake up the server.\n');
 
     const testRequest = {
         id: generateId(),
@@ -90,14 +90,14 @@ import {
         console.log('Warmup message failed. Aborting test https://' + INSTANCE[instance] + scenarioURL);
     }
     else {
-        console.log('Starting test in\n');
+        console.log('Success. \n\nStarting test in\n');
 
         for (let countdown = 3; countdown > 0; countdown--) {
             console.log(countdown);
             await new Promise(resolve => setTimeout(resolve, 1000 * 1));
         }
 
-        console.log('Starting Test. Send requests every: ' + 1000 / freq);
+        console.log('Starting Test. Send requests every: ' + 1000 / freq + ' ms');
 
         // Trigger the scenario at a rate of [frequency] times per second
         let test = setInterval(() => {
@@ -107,7 +107,26 @@ import {
                 requestSize: size + '',
                 data: requests[Math.floor(Math.random() * 9)] // Pick one of the ten generated requests
             };
-            runScenario(scenarioURL, request, results, INSTANCE[instance], updateErrors);
+
+            const errorResponse = {
+                id: request.id,
+                frequency: freq + '',
+                requestSize: size + '',
+                instanceType: INSTANCE[instance],
+                serverType: server,
+                databaseType: db,
+                totalTime: -1,
+                clientTotalTime: -1,
+                timestamp: -1,
+                cpuUsage: -1,
+                freeMem: -1,
+                timeDelete: -1,
+                timeRead: -1,
+                timeWrite: -1,
+                totalMem: -1                
+            }
+
+            runScenario(scenarioURL, request, results, INSTANCE[instance], updateErrors, errorResponse);
         }, (1000 / freq));
 
         // Function to end the test
@@ -119,7 +138,7 @@ import {
 
                 console.log('\nTest Complete. Waiting 10 seconds for any open calls to finish');
                 await new Promise(resolve => setTimeout(resolve, 1000 * 10));
-                console.log('Sent ~' + (results.length + totalErrors) + ' requests over ' + TEST_PERIOD / 1000 + ' seconds');
+                console.log('Sent ~' + (results.length) + ' requests over ' + TEST_PERIOD / 1000 + ' seconds with ' + totalErrors + ' errors');
 
                 const now = new Date();
                 const title = INSTANCE[instance] + '-' + server + '-' + db + '-' + now.getTime();
