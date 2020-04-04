@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { Router } from 'express';
 import { getCurrentMillis, getStats } from './helpers';
-import { getConnection, getDb } from './GCloud';
+import { getConnection, getDb } from './cloud';
 
 const router = Router();
 
