@@ -3,7 +3,7 @@
 */
 
 // Length of the Test
-export const TEST_PERIOD = 1000 * 120; // Two Minutes
+export const TEST_PERIOD = 1000 * 60 * 2; // Two Minutes
 
 // How many consecutive errors before preemtively stopping test
 export const TOO_MANY_ERRORS = 10;

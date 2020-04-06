@@ -117,7 +117,7 @@ import {
                 databaseType: db,
                 totalTime: -1,
                 clientTotalTime: -1,
-                timestamp: -1,
+                timestamp: Date.now(),
                 cpuUsage: -1,
                 freeMem: -1,
                 timeDelete: -1,
