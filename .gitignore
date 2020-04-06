@@ -92,3 +92,4 @@ yarn-error.log*
 
 **/.ipynb_checkpoints/**
 **/results/*
+*.csv
