@@ -13,7 +13,7 @@
     "dotenv": "^8.2.0",
     "dummy-json": "^2.0.0",
     "firebase-admin": "^8.9.2",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "shelljs": "0.8.3",
     "shortid": "^2.2.15"
   },
